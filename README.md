@@ -8,7 +8,7 @@ Before we can work with HAProxy, we need to install it:
 sudo apt -y install haproxy
 ```
 
-Let's modify our /etc/haproxy/haproxy.cfg configuration file:  
+Let's modify our `/etc/haproxy/haproxy.cfg` configuration file:  
 
 ```
 # Site 1 Backend
