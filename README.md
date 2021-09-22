@@ -1,5 +1,44 @@
 # HAProxy as an API Gateway
 
+## Install HAProxy  
+
+Before we can work with HAProxy, we need to install it:  
+
+```
+sudo apt -y install haproxy
+```
+
+Let's modify our /etc/haproxy/haproxy.cfg configuration file:  
+
+```
+# Site 1 Backend
+backend site1
+	balance roundrobin
+	server site1-web1 192.168.2.25:8081 check
+	server site1-web2 192.168.2.25:8082 check
+	server site1-web3 192.168.2.25:8083 check
+# Site 2 Backend
+backend site2
+	balance roundrobin
+	server site2-web1 192.168.2.25:8084 check
+	server site2-web2 192.168.2.25:8085 check
+	server site2-web3 192.168.2.25:8086 check
+
+# Site Frontends
+	frontend site1
+		bind *:8000
+		default_backend site1
+	frontend site2
+		bind *:8100
+		default_backend site2
+```
+
+Restart HAProxy:  
+
+```
+sudo systemctl restart haproxy
+```
+
 ## Create Some Test Files  
 
 We're going to need some test files for our web server containers. We're going to use 6 containers in 2 groups
