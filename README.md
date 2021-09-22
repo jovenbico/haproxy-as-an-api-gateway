@@ -76,8 +76,10 @@ done
 ## Start Some Web Server Containers
 
 Ok, so now that we've got the odds and ends covered, let's stand up our web server containers. We're going to
-start a total of 6 `nginx` containers using Docker, simulating 2 sites, with 3 web servers per site. Our web
+start a total of 6 `nginx` containers using `Docker`, simulating 2 sites, with 3 web servers per site. Our web
 servers will be available on ports `8081` through `8086`.  
+
+See [how to install Docker](https://www.digitalocean.com/community/tutorials/how-to-install-and-use-docker-on-ubuntu-18-04).  
 
 Let's start our containers:  
 
