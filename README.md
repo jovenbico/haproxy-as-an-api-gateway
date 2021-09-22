@@ -1,5 +1,9 @@
 # HAProxy as an API Gateway
 
+The project is created on how to use HAProxy as an API Gateway. (homelab version)  
+
+See the [link](https://www.haproxy.com/blog/using-haproxy-as-an-api-gateway-part-1/) for reference.  
+
 ## Install HAProxy  
 
 Before we can work with HAProxy, we need to install it:  
