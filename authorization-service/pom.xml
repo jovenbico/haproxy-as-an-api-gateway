@@ -8,11 +8,11 @@
 		<version>2.5.4</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
-	<groupId>com.authentication</groupId>
-	<artifactId>authentication-service</artifactId>
+	<groupId>com.authorization</groupId>
+	<artifactId>authorization-service</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>authentication-service</name>
-	<description>Authentication Service</description>
+	<name>authorization-service</name>
+	<description>Authorization Service</description>
 	<properties>
 		<java.version>11</java.version>
 	</properties>
