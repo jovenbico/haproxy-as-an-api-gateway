@@ -4,6 +4,10 @@ The project is created on how to use HAProxy as an API Gateway. (homelab version
 
 See the [link](https://www.haproxy.com/blog/using-haproxy-as-an-api-gateway-part-1/) for reference.  
 
+## Start the Keycloak server  
+
+See [how to](keyclock/README.md)
+
 ## Install HAProxy  
 
 Before we can work with HAProxy, we need to install it:  
@@ -12,9 +16,29 @@ Before we can work with HAProxy, we need to install it:
 sudo apt -y install haproxy
 ```
 
+Install the [HAProxy OAuth library](https://github.com/haproxytech/haproxy-lua-oauth) into HAProxy  
+
+```
+git clone https://github.com/haproxytech/haproxy-lua-oauth.git
+cd haproxy-lua-oauth
+chmod +x ./install.sh
+sudo ./install.sh luaoauth
+```
+
 Let's modify our `/etc/haproxy/haproxy.cfg` configuration file:  
 
 ```
+global
+	lua-load /usr/local/share/lua/5.3/jwtverify.lua
+
+	setenv OAUTH_ISSUER http://keycloak.homelab.com/auth/realms/site-services
+	setenv OAUTH_AUDIENCE "http://myapp.homelab.com/services http://site1.homelab.com http://site2.homelab.com"
+	setenv OAUTH_PUBKEY_PATH /etc/haproxy/pem/pubkey.pem
+
+# Site keycloak bakend
+backend keycloak
+	server keycloak 192.168.2.25:8080 check
+
 # Site 1 Backend
 backend site1
 	balance roundrobin
@@ -40,8 +64,37 @@ frontend site2
 frontend http-in
 	bind *:80
 	mode http
+
+	# a stick table stores the count of requests each clients makes
+	stick-table  type ip  size 100k  expire 1m  store http_req_cnt
+
+	# allow 'auth' request to go straight through to Keycloak
+	http-request allow if { path_beg /auth/ }
+	use_backend keycloak if { path_beg /auth/ }
+
+	# deny requests that don't send an access token
+	http-request deny deny_status 401 unless { req.hdr(authorization) -m found }
+
+	# verify access tokens
+	http-request lua.jwtverify
+	http-request deny deny_status 403 unless { var(txn.authorized) -m bool }
+
+	# add the client's subscription level to the access logs: bronze, silver, gold
+	http-request capture var(txn.oauth.scope) len 10
+
+	# track clients' request counts. This line will not be called
+	# once the client is denied above, which prevents them from perpetually
+	# locking themselves out.
+	http-request track-sc0 src
+
+	# deny requests after the client exceeds their allowed requests per minute
+	http-request deny deny_status 429 if { var(txn.oauth.scope) -m sub bronze } { sc_http_req_cnt(0) gt 10 }
+	http-request deny deny_status 429 if { var(txn.oauth.scope) -m sub silver } { sc_http_req_cnt(0) gt 100 }
+	http-request deny deny_status 429 if { var(txn.oauth.scope) -m sub gold }   { sc_http_req_cnt(0) gt 1000 }
+
 	acl site-1 hdr(host) -i site1.homelab.com
 	acl site-2 hdr(host) -i site2.homelab.com
+
 	use_backend site1 if site-1
 	use_backend site2 if site-2
 ```
@@ -55,7 +108,7 @@ sudo systemctl restart haproxy
 Add to `/etc/hosts`:  
 
 ```
-192.168.2.23 site1.homelab.com site2.homelab.com
+192.168.2.23 keycloak.homelab.com site1.homelab.com site2.homelab.com
 ```
 
 ## Create Some Test Files  
