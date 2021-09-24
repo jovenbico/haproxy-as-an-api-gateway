@@ -6,7 +6,7 @@ See the [link](https://www.haproxy.com/blog/using-haproxy-as-an-api-gateway-part
 
 ## Start the Keycloak server  
 
-See [how to](keyclock/README.md)
+See [how to](keycloak.md)
 
 ## Install HAProxy  
 
