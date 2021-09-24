@@ -40,6 +40,15 @@ curl --location --request POST 'http://keycloak.homelab.com/auth/realms/site-ser
 
 ;;;
 {
+  "title": "About Front Matter"
+  "example": {
+    "language": "json"
+  }
+}
+;;;
+
+;;;
+{
   "alg": "RS256",
   "typ": "JWT",
   "kid": "k89QPaKowNRrI1YtRYGRNLntjvr8i64EP-Xn9tV93Mw"
