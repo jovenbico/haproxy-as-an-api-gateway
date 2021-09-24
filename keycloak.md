@@ -38,24 +38,17 @@ curl --location --request POST 'http://keycloak.homelab.com/auth/realms/site-ser
 --data 'grant_type=client_credentials'
 ```
 
-;;;
-{
-  "title": "About Front Matter"
-  "example": {
-    "language": "json"
-  }
-}
-;;;
 
-;;;
+
+```json
 {
   "alg": "RS256",
   "typ": "JWT",
   "kid": "k89QPaKowNRrI1YtRYGRNLntjvr8i64EP-Xn9tV93Mw"
 }
-;;;
+```
 
-;;;
+```json
 {
   "exp": 1632468367,
   "iat": 1632468067,
@@ -71,4 +64,4 @@ curl --location --request POST 'http://keycloak.homelab.com/auth/realms/site-ser
   "clientHost": "192.168.2.23",
   "clientAddress": "192.168.2.23"
 }
-;;;
+```
