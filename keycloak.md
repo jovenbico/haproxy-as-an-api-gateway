@@ -44,7 +44,9 @@ curl --location --request POST 'http://keycloak.homelab.com/auth/realms/site-ser
   "typ": "JWT",
   "kid": "k89QPaKowNRrI1YtRYGRNLntjvr8i64EP-Xn9tV93Mw"
 }
+;;;
 
+;;;
 {
   "exp": 1632468367,
   "iat": 1632468067,
