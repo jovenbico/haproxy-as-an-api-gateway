@@ -8,6 +8,10 @@ See the [link](https://www.haproxy.com/blog/using-haproxy-as-an-api-gateway-part
 
 See [how to](keycloak.md)
 
+In our example project, the public key, pubkey.pem, is mounted as a volume into the HAProxy container. Download the key from Keycloak by going to the weather-services Realm Settings > Keys page and clicking the Public key link on the row that says RS256.
+
+Replace the contents of the file pubkey.pem in the demo project with the value from Keycloak. You must prefix the value with —–BEGIN PUBLIC KEY—– and end it with —–END PUBLIC KEY—–
+
 ## Install HAProxy  
 
 Before we can work with HAProxy, we need to install it:  
