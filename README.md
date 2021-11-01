@@ -175,3 +175,18 @@ for site in `seq 1 2`; \
   done ; \
 done | more
 ```
+
+## Manage HAProxy with Runtime API
+
+Once the Runtime API is enabled, it can be accessed manually by using the command “socat”: 
+
+[See](https://www.haproxy.com/blog/dynamic-scaling-for-microservices-with-runtime-api/#haproxy) the article about it.
+
+```
+$ sudo apt install socat
+$ echo "help" | sudo socat stdio /run/haproxy/admin.sock
+
+## 'set server <srv> state' expects 'ready', 'drain' and 'maint'
+$ echo "set server site1/site1-web1 state maint" | sudo socat stdio /run/haproxy/admin.sock
+$ echo "set server site1/site1-web1 state ready" | sudo socat stdio /run/haproxy/admin.sock
+```
